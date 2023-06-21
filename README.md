@@ -21,11 +21,17 @@
 
 #### Пример Dockerfile
 
-`FROM node:18-alpine WORKDIR /app COPY . . RUN yarn install --production CMD ["node", "src/index.js"]
-EXPOSE 3000`
+
+
+    FROM node:18-alpine
+    WORKDIR /app 
+    COPY . . 
+    RUN yarn install --production 
+    CMD ["node", "src/index.js"]
+    EXPOSE 3000
 
 #### Пример docker-compose файла
-````
+
     version '2'
     volumes:
         nextcloud:
@@ -57,11 +63,10 @@ EXPOSE 3000`
                 - MYSQL_DATABASE=nextcloud
                 - MYSQL_USER=nextcloud
                 - MYSQL_HOST=db
-````
 
 Чтобы запустить данный проект у вас должен быть скачан docker и docker-compose.
 
-Затем командой ``docker compose up `` вы можете запустить контейнеры apache, php, mariaDB, phpMyAdmin.
+Затем командой ``docker compose up`` вы можете запустить контейнеры apache, php, mariaDB, phpMyAdmin.
 
 Для остановки всех контейнеров воспользуйтесь командой ``docker compose stop``. В этом случае контейнеры 
 будут остановлены, но не удалены для удаления контейнеров можно воспльзоваться следующими командами:
@@ -70,5 +75,5 @@ EXPOSE 3000`
 2. ``docker container prune -f`` - команда удаляет все остановленные контейнеры (ключ -f указывает на то что удаления произойдет без подтверждения)
 
 Для того чтобы убедиться какие контейнеры сейчас работают используйте ``docker ps``, а если хотите посмотреть
-все контейнеры, которые на данный момент существуют воспользуйтесь этой же комнадой добавив ключ **-a**
+все контейнеры, которые на данный момент существуют воспользуйтесь этой же комнадой добавив ключ ``-a``
 
