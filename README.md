@@ -25,9 +25,7 @@
 EXPOSE 3000`
 
 #### Пример docker-compose файла
-
-`
-
+````
     version '2'
     volumes:
         nextcloud:
