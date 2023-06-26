@@ -1,59 +1,32 @@
 version: '3.5'
 services:
-  php:
-    image: php:7.3.31-fpm
-    container_name: php
-    volumes:
-      - .\php:/usr/src/app/
-    depends_on: # Гаратируем, что php не запустится раньше базы данных
-      - db
-
-  apache:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: apache
+  php-apache:
+    build: .
+    container_name: php-apache
     ports:
       - '80:80'
     volumes:
-      - .\apache:/usr/local/apache2/htdocs/
-    restart: unless-stopped
-    depends_on: # Гарантируем, что apache не запустится раньше все остальных сервисов
-      - php
-      - phpmyadmin
+      - './:/var/www/html/'
+    depends_on:
       - db
-
 
   db:
     image: mariadb
     container_name: db
     volumes:
-      - .\db:/var/lib/mysql
+      - './db:/var/lib/mysql'
     environment:
-      MYSQL_ROOT_PASSWORD: pass
-      MYSQL_DATABASE: yourdb # База данных
-      MYSQL_USER: root # Имя пользователя базы данных
-      MYSQL_PASSWORD: pass # Пароль пользователя
-    restart: unless-stopped
+      MYSQL_ROOT_PASSWORD: root
 
   phpmyadmin:
     image: phpmyadmin
-    links:
-      - db
     container_name: phpmyadmin
     ports:
       - '8080:80'
-    volumes:
-      - .\config:/etc/phpmyadmin/config.user.inc.php
     environment:
-      PMA_HOST: db # Хостом является сервис db
-      PMA_USER: root # Имя должно совпадать с именем в сервисе db
-      PMA_PASSWORD: pass # Пароль должен совпадать с паролем в сервисе db
-    restart: unless-stopped
-    depends_on: # Гарантируем, что запуск админки произойдет позже запуска db
+      MYSQL_ROOT_PASSWORD: root
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+    depends_on:
       - db
-volumes:
-  php:
-  apache:
-  db:
-  phpmyadmin:
